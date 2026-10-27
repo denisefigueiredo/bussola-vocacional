@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bússola Técnica — ETE Ariano Suassuna &amp; IFPE Garanhuns</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg: #EFEEE2;
+    --bg-panel: #FFFEFA;
+    --ink: #202B24;
+    --ink-soft: #4C5750;
+    --line: #D9D6C4;
+
+    --c-ds:  #35586B;   /* Desenvolvimento de Sistemas */
+    --c-inf: #1F6F54;   /* Informática */
+    --c-log: #C98A2C;   /* Logística */
+    --c-adm: #7A3B4E;   /* Administração */
+    --c-amb: #5C7A3D;   /* Meio Ambiente */
+    --c-ele: #8B5E3C;   /* Eletroeletrônica */
+
+    --accent: #1F6F54;
+    --radius: 18px;
+    --shadow: 0 10px 30px rgba(32,43,36,0.08);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 10% 0%, rgba(31,111,84,0.07), transparent 45%),
+      radial-gradient(circle at 90% 10%, rgba(201,138,44,0.08), transparent 45%),
+      var(--bg);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    min-height:100vh;
+    padding:32px 16px 60px;
+  }
+
+  .wrap{max-width:760px;margin:0 auto;}
+
+  header.top{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:28px;
+  }
+  .compass{
+    width:46px;height:46px;flex:none;
+    border-radius:50%;
+    border:2px solid var(--ink);
+    position:relative;
+    background:var(--bg-panel);
+  }
+  .compass::before{
+    content:"";
+    position:absolute;
+    top:50%;left:50%;
+    width:2px;height:16px;
+    background:var(--c-enf);
+    transform-origin:bottom center;
+    transform:translate(-50%,-100%) rotate(28deg);
+  }
+  .compass::after{
+    content:"";
+    position:absolute;
+    top:50%;left:50%;
+    width:2px;height:12px;
+    background:var(--ink-soft);
+    transform-origin:bottom center;
+    transform:translate(-50%,-100%) rotate(28deg + 180deg);
+    transform:translate(-50%,0%) rotate(208deg);
+  }
+  .brandtext .eyebrow{
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
+  .brandtext h1{
+    font-family:'Fraunces', serif;
+    font-size:26px;
+    margin:2px 0 0;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+
+  .card{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:30px;
+    margin-bottom:20px;
+  }
+
+  h2.section-title{
+    font-family:'Fraunces', serif;
+    font-size:22px;
+    font-weight:600;
+    margin:0 0 10px;
+  }
+  p{line-height:1.6; color:var(--ink);}
+  p.lede{color:var(--ink-soft); font-size:16px;}
+
+  .schools{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin:18px 0 6px;
+  }
+  @media(max-width:560px){.schools{grid-template-columns:1fr;}}
+  .school-chip{
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px 16px;
+    background:#FBFAF3;
+  }
+  .school-chip .name{font-weight:700; font-size:14.5px;}
+  .school-chip ul{margin:8px 0 0; padding-left:18px; font-size:14px; color:var(--ink-soft);}
+  .school-chip li{margin-bottom:3px;}
+
+  /* profile choice */
+  .profile-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    margin-top:20px;
+  }
+  @media(max-width:560px){.profile-grid{grid-template-columns:1fr;}}
+  .profile-card{
+    border:2px solid var(--line);
+    border-radius:16px;
+    padding:20px;
+    cursor:pointer;
+    background:#FBFAF3;
+    transition:border-color .15s ease, transform .1s ease;
+    text-align:left;
+  }
+  .profile-card:hover{border-color:var(--accent); transform:translateY(-2px);}
+  .profile-card:focus-visible{outline:3px solid var(--accent); outline-offset:2px;}
+  .profile-card .tag{
+    display:inline-block;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    font-weight:700;
+    color:var(--accent);
+    margin-bottom:8px;
+  }
+  .profile-card h3{margin:0 0 8px; font-family:'Fraunces', serif; font-size:19px;}
+  .profile-card p{font-size:14px; color:var(--ink-soft); margin:0;}
+
+  button.primary{
+    background:var(--ink);
+    color:#fff;
+    border:none;
+    border-radius:999px;
+    padding:13px 26px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  button.primary:hover{background:#0f1712;}
+  button.primary:focus-visible{outline:3px solid var(--accent); outline-offset:2px;}
+  button.ghost{
+    background:transparent;
+    color:var(--ink-soft);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:12px 22px;
+    font-size:14.5px;
+    font-weight:600;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  button.ghost:hover{border-color:var(--ink-soft); color:var(--ink);}
+
+  /* trail progress */
+  .trail{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-bottom:22px;
+    flex-wrap:wrap;
+  }
+  .trail .step{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--line);
+    flex:none;
+  }
+  .trail .step.done{background:var(--accent);}
+  .trail .step.current{background:var(--c-log); width:12px; height:12px;}
+  .trail-label{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-left:4px;
+  }
+
+  .question-text{
+    font-family:'Fraunces', serif;
+    font-size:23px;
+    font-weight:600;
+    line-height:1.4;
+    margin:4px 0 26px;
+  }
+
+  .scale{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:10px;
+  }
+  .scale.adapted{grid-template-columns:1fr; gap:12px;}
+  .opt{
+    border:1.5px solid var(--line);
+    border-radius:14px;
+    background:#FBFAF3;
+    padding:14px 8px;
+    text-align:center;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink-soft);
+    transition:all .12s ease;
+  }
+  .opt.adapted{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    text-align:left;
+    padding:16px 18px;
+    font-size:15.5px;
+  }
+  .opt .emoji{font-size:22px; flex:none;}
+  .opt:hover{border-color:var(--accent); background:#fff;}
+  .opt:focus-visible{outline:3px solid var(--accent); outline-offset:2px;}
+  .opt.selected{border-color:var(--ink); background:var(--ink); color:#fff;}
+
+  .nav-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:26px;
+  }
+  .skip-note{font-size:13px; color:var(--ink-soft);}
+
+  /* results */
+  .result-hero{
+    text-align:center;
+    padding:10px 0 4px;
+  }
+  .result-hero .eyebrow{
+    font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink-soft); font-weight:700;
+  }
+  .result-hero h2{
+    font-family:'Fraunces', serif;
+    font-size:28px;
+    margin:8px 0 4px;
+  }
+
+  .bars{margin-top:22px;}
+  .bar-row{
+    display:grid;
+    grid-template-columns:170px 1fr 48px;
+    align-items:center;
+    gap:10px;
+    margin-bottom:12px;
+  }
+  @media(max-width:560px){
+    .bar-row{grid-template-columns:110px 1fr 40px; font-size:13px;}
+  }
+  .bar-row .label{font-weight:600; font-size:14px;}
+  .bar-row .label .school{display:block; font-weight:400; color:var(--ink-soft); font-size:11.5px;}
+  .bar-track{
+    background:#E9E7D8;
+    border-radius:999px;
+    height:14px;
+    overflow:hidden;
+  }
+  .bar-fill{
+    height:100%;
+    border-radius:999px;
+    transition:width .6s ease;
+  }
+  .bar-pct{font-size:13px; color:var(--ink-soft); text-align:right;}
+
+  .top-picks{
+    display:grid;
+    gap:14px;
+    margin-top:26px;
+  }
+  .pick-card{
+    border-radius:16px;
+    padding:20px;
+    border:1.5px solid var(--line);
+    background:#FBFAF3;
+    position:relative;
+    padding-left:24px;
+  }
+  .pick-card::before{
+    content:"";
+    position:absolute;
+    left:0; top:16px; bottom:16px;
+    width:5px;
+    border-radius:4px;
+  }
+  .pick-card .rank{
+    font-size:11.5px; text-transform:uppercase; letter-spacing:.08em;
+    font-weight:700; color:var(--ink-soft);
+  }
+  .pick-card h3{
+    font-family:'Fraunces', serif;
+    margin:4px 0 6px;
+    font-size:20px;
+  }
+  .pick-card .meta{font-size:13px; color:var(--ink-soft); margin-bottom:8px;}
+  .pick-card p{font-size:14.5px; margin:0;}
+  .pick-card a{color:var(--ink); font-weight:600;}
+
+  .footer-note{
+    font-size:13px;
+    color:var(--ink-soft);
+    line-height:1.6;
+    margin-top:24px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+  }
+
+  .actions-end{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-top:24px;
+  }
+
+  .hidden{display:none !important;}
+
+  .badge-mode{
+    display:inline-block;
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:4px 10px;
+    border-radius:999px;
+    background:#E9E7D8;
+    color:var(--ink-soft);
+    margin-bottom:14px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="compass" aria-hidden="true"></div>
+    <div class="brandtext">
+      <div class="eyebrow">Garanhuns · PE</div>
+      <h1>Bússola Técnica</h1>
+    </div>
+  </header>
+
+  <!-- SCREEN: INTRO -->
+  <section id="screen-intro" class="card">
+    <h2 class="section-title">Um teste para ajudar na escolha do curso técnico</h2>
+    <p class="lede">Este teste foi feito para quem vai concorrer à seleção para o ensino médio técnico integrado em Garanhuns, com base nos cursos realmente oferecidos pela ETE Ariano Vilar Suassuna e pelo IFPE Campus Garanhuns.</p>
+
+    <div class="schools">
+      <div class="school-chip">
+        <div class="name">ETE Ariano Vilar Suassuna</div>
+        <ul>
+          <li>Desenvolvimento de Sistemas</li>
+          <li>Logística</li>
+          <li>Administração</li>
+        </ul>
+      </div>
+      <div class="school-chip">
+        <div class="name">IFPE — Campus Garanhuns</div>
+        <ul>
+          <li>Informática</li>
+          <li>Meio Ambiente</li>
+          <li>Eletroeletrônica</li>
+        </ul>
+      </div>
+    </div>
+
+    <p style="margin-top:18px;">Não existe resposta certa ou errada. O resultado é um <strong>ponto de partida para conversar</strong> — não uma decisão definitiva, e não substitui orientação de um profissional de orientação vocacional.</p>
+
+    <h2 class="section-title" style="margin-top:26px; font-size:19px;">Quem vai responder agora?</h2>
+    <p class="lede" style="margin-top:-4px;">Escolha o formato. Os dois avaliam os mesmos seis cursos — só muda o jeito das perguntas.</p>
+
+    <div class="profile-grid">
+      <div class="profile-card" tabindex="0" role="button" id="btn-standard">
+        <span class="tag">Formato padrão</span>
+        <h3>Perguntas do dia a dia</h3>
+        <p>Frases mais livres, com escala de "discordo totalmente" a "concordo totalmente". Bom para quem gosta de responder rápido.</p>
+      </div>
+      <div class="profile-card" tabindex="0" role="button" id="btn-adapted">
+        <span class="tag">Formato adaptado</span>
+        <h3>Passo a passo, para pessoas autistas</h3>
+        <p>Frases curtas e diretas, uma por vez, sem tempo limite, com opção "não sei" sempre disponível e perguntas sobre o ambiente de trabalho de cada curso.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN: ADAPTED PRE-NOTE -->
+  <section id="screen-adapted-note" class="card hidden">
+    <span class="badge-mode">Formato adaptado</span>
+    <h2 class="section-title">Antes de começar</h2>
+    <p>Algumas combinações para deixar isso mais confortável:</p>
+    <ul style="line-height:1.8; color:var(--ink);">
+      <li>Não existe resposta errada. É sobre o que <em>você</em> gosta, não sobre o que os outros esperam.</li>
+      <li>Não há tempo limite. Pode ler quantas vezes quiser antes de responder.</li>
+      <li>É possível voltar e mudar uma resposta a qualquer momento.</li>
+      <li>Se uma pergunta não fizer sentido, pode marcar "Não sei" e seguir em frente.</li>
+      <li>É possível parar e continuar depois — o teste não é salvo, então, se preferir, alguém pode anotar as respostas.</li>
+    </ul>
+    <div class="nav-row">
+      <button class="ghost" id="adapted-back">Voltar</button>
+      <button class="primary" id="adapted-continue">Começar</button>
+    </div>
+  </section>
+
+  <!-- SCREEN: QUIZ -->
+  <section id="screen-quiz" class="card hidden">
+    <div id="mode-badge"></div>
+    <div class="trail" id="trail"></div>
+    <div class="question-text" id="q-text"></div>
+    <div class="scale" id="q-options"></div>
+    <div class="nav-row">
+      <button class="ghost" id="q-back">Voltar</button>
+      <span class="skip-note" id="q-progress"></span>
+    </div>
+  </section>
+
+  <!-- SCREEN: RESULTS -->
+  <section id="screen-results" class="card hidden">
+    <div class="result-hero">
+      <div class="eyebrow">Resultado</div>
+      <h2>Para onde sua bússola aponta</h2>
+      <p class="lede">Estes são os cursos com maior afinidade, do mais ao menos alinhado com o que você respondeu.</p>
+    </div>
+
+    <div class="bars" id="bars"></div>
+    <div class="top-picks" id="top-picks"></div>
+
+    <div class="footer-note">
+      Este resultado é apenas um ponto de partida para a conversa em família. As informações de vagas, editais e datas de inscrição mudam a cada seleção — confira sempre os sites oficiais: <a href="http://www.etegaranhuns.com.br/" target="_blank" rel="noopener">etegaranhuns.com.br</a> e <a href="https://portal.ifpe.edu.br/garanhuns" target="_blank" rel="noopener">portal.ifpe.edu.br/garanhuns</a>.
+    </div>
+
+    <div class="actions-end">
+      <button class="primary" id="restart-btn">Refazer o teste</button>
+      <button class="ghost" id="switch-mode-btn">Tentar o outro formato</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+
+  var COURSES = {
+    DS:  {name:"Desenvolvimento de Sistemas", school:"ETE Ariano Suassuna", color:"var(--c-ds)",
+      blurb:"Programação, lógica e criação de sistemas e aplicações. Combina com quem gosta de resolver problemas na tela, testar e ajustar até funcionar certinho.",
+      link:"http://www.etegaranhuns.com.br/curso-ds"},
+    LOG: {name:"Logística", school:"ETE Ariano Suassuna", color:"var(--c-log)",
+      blurb:"Planejamento de rotas, estoques e processos de transporte de produtos. Combina com quem gosta de organizar, otimizar e seguir processos claros.",
+      link:"http://www.etegaranhuns.com.br/curso-log"},
+    ADM: {name:"Administração", school:"ETE Ariano Suassuna", color:"var(--c-adm)",
+      blurb:"Gestão de empresas, finanças, pessoas e processos de um negócio. Combina com quem gosta de organizar, planejar e entender como uma empresa funciona por dentro, do financeiro ao atendimento.",
+      link:"http://www.etegaranhuns.com.br/"},
+    INF: {name:"Informática", school:"IFPE Garanhuns", color:"var(--c-inf)",
+      blurb:"Redes, manutenção de computadores, suporte técnico e programação. Combina com quem gosta de mexer em equipamentos e resolver problemas técnicos.",
+      link:"https://portal.ifpe.edu.br/garanhuns/cursos/"},
+    AMB: {name:"Meio Ambiente", school:"IFPE Garanhuns", color:"var(--c-amb)",
+      blurb:"Estudo da natureza, sustentabilidade e trabalho de campo e laboratório. Combina com quem gosta de estar ao ar livre e se importa com questões ambientais.",
+      link:"https://portal.ifpe.edu.br/garanhuns/cursos/"},
+    ELE: {name:"Eletroeletrônica", school:"IFPE Garanhuns", color:"var(--c-ele)",
+      blurb:"Circuitos, instalações elétricas e eletrônica aplicada. Combina com quem gosta de montar, desmontar e entender aparelhos por dentro.",
+      link:"https://portal.ifpe.edu.br/garanhuns/cursos/"}
+  };
+  var COURSE_ORDER = ["DS","LOG","ADM","INF","AMB","ELE"];
+
+  var STANDARD_SCALE = [
+    {v:1, label:"Discordo totalmente"},
+    {v:2, label:"Discordo"},
+    {v:3, label:"Neutro"},
+    {v:4, label:"Concordo"},
+    {v:5, label:"Concordo totalmente"}
+  ];
+
+  var ADAPTED_SCALE = [
+    {v:1, label:"Não, de jeito nenhum", emoji:"✖️"},
+    {v:2, label:"Um pouco não", emoji:"🔽"},
+    {v:3, label:"Não sei / mais ou menos", emoji:"➖"},
+    {v:4, label:"Um pouco sim", emoji:"🔼"},
+    {v:5, label:"Sim, com certeza", emoji:"✔️"}
+  ];
+
+  var standardQuestions = [
+    {t:"Gosto de resolver problemas de lógica, como quebra-cabeças, sudoku ou jogos de raciocínio.", w:{DS:2, INF:1}},
+    {t:"Tenho curiosidade em entender como um site, jogo ou aplicativo funciona por dentro.", w:{DS:2}},
+    {t:"Gosto de organizar tarefas, criar listas ou planejar horários e rotas.", w:{LOG:2}},
+    {t:"Me interessa saber como um produto sai da fábrica e chega até a loja ou até minha casa.", w:{LOG:2}},
+    {t:"Gosto de organizar a rotina de um escritório, cuidar de documentos, prazos e processos administrativos.", w:{ADM:2}},
+    {t:"Tenho interesse em aprender como funciona a parte financeira de uma empresa, como contas a pagar e a receber.", w:{ADM:2}},
+    {t:"Gosto de estar em contato com a natureza — plantas, animais, rios, mata.", w:{AMB:2}},
+    {t:"Me incomodo com problemas ambientais, como lixo, poluição ou desmatamento, e penso em soluções.", w:{AMB:2}},
+    {t:"Gosto de mexer em fios, circuitos ou aparelhos eletrônicos, ou consertar coisas que usam eletricidade.", w:{ELE:2}},
+    {t:"Tenho curiosidade sobre como a energia elétrica chega e funciona nos aparelhos do dia a dia.", w:{ELE:2}},
+    {t:"Gosto de configurar computadores, redes de internet, ou resolver problemas técnicos de informática.", w:{INF:2}},
+    {t:"Prefiro seguir um passo a passo bem definido a criar algo totalmente do zero.", w:{LOG:1, ELE:1, ADM:1}},
+    {t:"Prefiro trabalhar concentrado(a) e sozinho(a) em uma tarefa técnica a conversar com muitas pessoas o tempo todo.", w:{DS:1, INF:1}},
+    {t:"Gosto de atividades em que preciso conversar, orientar ou atender pessoas diretamente, cara a cara.", w:{ADM:2, LOG:1}},
+    {t:"Prefiro atividades ao ar livre e em campo a ficar sempre em uma sala fechada.", w:{AMB:2}},
+    {t:"Gosto de desmontar aparelhos ou brinquedos para entender como funcionam por dentro.", w:{ELE:2}},
+    {t:"Gosto de imaginar e criar coisas novas, como jogos, aplicativos ou sites.", w:{DS:2, INF:1}},
+    {t:"Me interessa entender como uma empresa é organizada, da contratação de funcionários até as vendas.", w:{ADM:2}},
+    {t:"Gosto de números, planilhas, e de calcular a forma mais eficiente de fazer algo, como a rota mais rápida ou o melhor uso de um orçamento.", w:{LOG:2, ADM:1}},
+    {t:"Gosto de aprender sobre redes de computadores, cabos, servidores ou manutenção de equipamentos.", w:{INF:2}}
+  ];
+
+  var adaptedQuestions = [
+    {t:"Eu gosto de resolver quebra-cabeças de lógica, como sudoku.", w:{DS:2, INF:1}},
+    {t:"Eu tenho curiosidade em saber como um jogo ou aplicativo de celular funciona por dentro.", w:{DS:2}},
+    {t:"Eu gosto de fazer listas e organizar horários.", w:{LOG:2}},
+    {t:"Eu tenho interesse em saber como um produto viaja da fábrica até a loja.", w:{LOG:2}},
+    {t:"Eu gosto de organizar papéis, pastas e documentos de forma certinha.", w:{ADM:2}},
+    {t:"Eu tenho interesse em aprender como o dinheiro de uma empresa é controlado.", w:{ADM:2}},
+    {t:"Eu gosto de estar perto de plantas, animais ou rios.", w:{AMB:2}},
+    {t:"Quando eu vejo lixo jogado na natureza, eu penso em formas de resolver isso.", w:{AMB:2}},
+    {t:"Eu gosto de mexer em fios, pilhas ou aparelhos elétricos.", w:{ELE:2}},
+    {t:"Eu tenho curiosidade em saber como a eletricidade funciona dentro dos aparelhos.", w:{ELE:2}},
+    {t:"Eu gosto de configurar computadores ou resolver problemas técnicos, como internet que não funciona.", w:{INF:2}},
+    {t:"Eu prefiro seguir um passo a passo já pronto a inventar algo do zero.", w:{LOG:1, ELE:1, ADM:1}},
+    {t:"Eu gosto de desmontar brinquedos ou aparelhos para ver como são por dentro.", w:{ELE:2}},
+    {t:"Eu gosto de criar coisas novas no computador, como jogos ou sites.", w:{DS:2, INF:1}},
+    {t:"Eu tenho interesse em saber como uma empresa é organizada por dentro.", w:{ADM:2}},
+    {t:"Eu gosto de trabalhar com números e calcular a forma mais rápida de fazer algo.", w:{LOG:2, ADM:1}},
+    {t:"Eu gosto de aprender sobre cabos, redes de internet ou consertar computadores.", w:{INF:2}},
+    {t:"Eu prefiro um trabalho em que faço tarefas parecidas todos os dias, com poucas surpresas.", w:{LOG:2, ELE:1, ADM:1}},
+    {t:"Eu prefiro um trabalho em que fico sozinho(a) ou com poucas pessoas por perto na maior parte do tempo.", w:{DS:2, INF:1, AMB:1}},
+    {t:"Eu não me incomodo em conversar com pessoas diferentes o tempo todo, mesmo pessoas que não conheço.", w:{ADM:2, LOG:1}},
+    {t:"Eu prefiro lugares silenciosos a lugares com muito barulho ou muito movimento.", w:{DS:2, INF:1}},
+    {t:"Eu não me incomodo em trabalhar ao ar livre, mesmo com sol, chuva ou terra.", w:{AMB:2}},
+    {t:"Eu prefiro tarefas com instruções bem claras e escritas a tarefas em que preciso adivinhar o que fazer.", w:{LOG:1, ELE:1, INF:1, ADM:1}}
+  ];
+
+  var state = {
+    mode: null,           // "standard" | "adapted"
+    questions: [],
+    scale: [],
+    index: 0,
+    answers: []           // array of {v}
+  };
+
+  var el = {
+    intro: document.getElementById('screen-intro'),
+    adaptedNote: document.getElementById('screen-adapted-note'),
+    quiz: document.getElementById('screen-quiz'),
+    results: document.getElementById('screen-results'),
+    trail: document.getElementById('trail'),
+    qText: document.getElementById('q-text'),
+    qOptions: document.getElementById('q-options'),
+    qBack: document.getElementById('q-back'),
+    qProgress: document.getElementById('q-progress'),
+    modeBadge: document.getElementById('mode-badge'),
+    bars: document.getElementById('bars'),
+    topPicks: document.getElementById('top-picks')
+  };
+
+  function showOnly(screen){
+    [el.intro, el.adaptedNote, el.quiz, el.results].forEach(function(s){
+      s.classList.toggle('hidden', s !== screen);
+    });
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function startMode(mode){
+    state.mode = mode;
+    state.questions = mode === 'standard' ? standardQuestions : adaptedQuestions;
+    state.scale = mode === 'standard' ? STANDARD_SCALE : ADAPTED_SCALE;
+    state.index = 0;
+    state.answers = new Array(state.questions.length).fill(null);
+    if(mode === 'adapted'){
+      showOnly(el.adaptedNote);
+    } else {
+      showOnly(el.quiz);
+      renderQuestion();
+    }
+  }
+
+  document.getElementById('btn-standard').addEventListener('click', function(){ startMode('standard'); });
+  document.getElementById('btn-adapted').addEventListener('click', function(){ startMode('adapted'); });
+  document.getElementById('btn-standard').addEventListener('keypress', function(e){ if(e.key==='Enter') startMode('standard'); });
+  document.getElementById('btn-adapted').addEventListener('keypress', function(e){ if(e.key==='Enter') startMode('adapted'); });
+
+  document.getElementById('adapted-back').addEventListener('click', function(){ showOnly(el.intro); });
+  document.getElementById('adapted-continue').addEventListener('click', function(){
+    showOnly(el.quiz);
+    renderQuestion();
+  });
+
+  function renderTrail(){
+    el.trail.innerHTML = '';
+    state.questions.forEach(function(q, i){
+      var dot = document.createElement('span');
+      dot.className = 'step' + (i < state.index ? ' done' : '') + (i === state.index ? ' current' : '');
+      el.trail.appendChild(dot);
+    });
+    var lbl = document.createElement('span');
+    lbl.className = 'trail-label';
+    lbl.textContent = (state.index+1) + ' de ' + state.questions.length;
+    el.trail.appendChild(lbl);
+  }
+
+  function renderQuestion(){
+    var q = state.questions[state.index];
+    el.modeBadge.innerHTML = '<span class="badge-mode">' + (state.mode==='adapted' ? 'Formato adaptado' : 'Formato padrão') + '</span>';
+    renderTrail();
+    el.qText.textContent = q.t;
+
+    el.qOptions.className = 'scale' + (state.mode==='adapted' ? ' adapted' : '');
+    el.qOptions.innerHTML = '';
+
+    state.scale.forEach(function(opt){
+      var btn = document.createElement('button');
+      btn.className = 'opt' + (state.mode==='adapted' ? ' adapted' : '');
+      btn.type = 'button';
+      if(state.answers[state.index] === opt.v) btn.classList.add('selected');
+
+      if(state.mode === 'adapted'){
+        btn.innerHTML = '<span class="emoji">' + opt.emoji + '</span><span>' + opt.label + '</span>';
+      } else {
+        btn.textContent = opt.label;
+      }
+
+      btn.addEventListener('click', function(){
+        state.answers[state.index] = opt.v;
+        goNext();
+      });
+      el.qOptions.appendChild(btn);
+    });
+
+    el.qBack.disabled = state.index === 0;
+    el.qBack.style.visibility = state.index === 0 ? 'hidden' : 'visible';
+    el.qProgress.textContent = state.mode === 'adapted' ? 'Sem tempo limite — responda com calma.' : '';
+  }
+
+  function goNext(){
+    if(state.index < state.questions.length - 1){
+      state.index++;
+      renderQuestion();
+    } else {
+      computeResults();
+    }
+  }
+
+  el.qBack.addEventListener('click', function(){
+    if(state.index > 0){
+      state.index--;
+      renderQuestion();
+    }
+  });
+
+  function computeResults(){
+    var totals = {}, maxes = {};
+    COURSE_ORDER.forEach(function(c){ totals[c]=0; maxes[c]=0; });
+
+    state.questions.forEach(function(q, i){
+      var ans = state.answers[i];
+      var val = ans === null ? 3 : ans; // treat unanswered as neutral
+      var dev = (val - 3); // -2..+2
+      Object.keys(q.w).forEach(function(c){
+        var weight = q.w[c];
+        totals[c] += dev * weight;
+        maxes[c] += 2 * weight; // max possible positive deviation
+      });
+    });
+
+    var results = COURSE_ORDER.map(function(c){
+      var max = maxes[c] || 1;
+      var pct = Math.round(((totals[c] + max) / (2*max)) * 100); // normalize -max..max -> 0..100
+      pct = Math.max(4, Math.min(100, pct));
+      return {code:c, pct:pct};
+    });
+
+    results.sort(function(a,b){ return b.pct - a.pct; });
+
+    renderResults(results);
+  }
+
+  function renderResults(results){
+    el.bars.innerHTML = '';
+    results.forEach(function(r){
+      var c = COURSES[r.code];
+      var row = document.createElement('div');
+      row.className = 'bar-row';
+      row.innerHTML =
+        '<div class="label">' + c.name + '<span class="school">' + c.school + '</span></div>' +
+        '<div class="bar-track"><div class="bar-fill" style="width:0%; background:' + c.color + '"></div></div>' +
+        '<div class="bar-pct">' + r.pct + '%</div>';
+      el.bars.appendChild(row);
+      setTimeout((function(row, pct){
+        return function(){ row.querySelector('.bar-fill').style.width = pct + '%'; };
+      })(row, r.pct), 60);
+    });
+
+    el.topPicks.innerHTML = '';
+    var top = results.slice(0,2);
+    top.forEach(function(r, i){
+      var c = COURSES[r.code];
+      var card = document.createElement('div');
+      card.className = 'pick-card';
+      card.style.setProperty('--pickcolor', c.color);
+      card.innerHTML =
+        '<div class="rank" style="color:' + c.color + '">' + (i===0 ? '1º lugar' : '2º lugar') + ' · ' + r.pct + '% de afinidade</div>' +
+        '<h3>' + c.name + '</h3>' +
+        '<div class="meta">' + c.school + '</div>' +
+        '<p>' + c.blurb + ' <a href="' + c.link + '" target="_blank" rel="noopener">Ver mais no site oficial →</a></p>';
+      card.style.setProperty('--before-color', c.color);
+      var beforeStyle = document.createElement('style');
+      el.topPicks.appendChild(card);
+      card.style.borderColor = c.color;
+      card.querySelector('h3').style.color = c.color;
+    });
+
+    // color the ::before bar via inline technique (border-left)
+    Array.from(el.topPicks.children).forEach(function(card, i){
+      card.style.borderLeft = '5px solid ' + COURSES[top[i].code].color;
+      card.style.paddingLeft = '19px';
+    });
+
+    showOnly(el.results);
+  }
+
+  document.getElementById('restart-btn').addEventListener('click', function(){
+    startMode(state.mode);
+  });
+  document.getElementById('switch-mode-btn').addEventListener('click', function(){
+    startMode(state.mode === 'standard' ? 'adapted' : 'standard');
+  });
+
+})();
+</script>
+</body>
+</html>
